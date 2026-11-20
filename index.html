@@ -8,7 +8,7 @@
 <!-- ============ EDIT THESE ============ -->
 <script>
   window.MM = {
-    telegram: "https://t.me/marketmiint",  // channel link
+    telegram: "https://t.me/+xCkuAZJatXllOTg1",  // FB Ads invite link (counts ad joins in Telegram)
     members:  "34,850+",                    // your REAL member count, or "" to hide
     pixelId:  "1921094522637930"                          // Meta Pixel ID (leave "" if none)
   };
@@ -85,7 +85,7 @@ h1 u{text-decoration:none;color:#ffd84d}
   </div>
 
   <div class="pills"><span>🌍 Global Cues</span><span>⚡ Breaking News</span><span>🆕 IPO GMP</span><span>🏦 FII/DII</span><span>🤝 Big Deals</span></div>
-  <a class="cta js-join" href="https://t.me/marketmiint"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg> अभी FREE Join करें</a>
+  <a class="cta js-join" href="https://t.me/+xCkuAZJatXllOTg1"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg> अभी FREE Join करें</a>
   <p class="after js-offer js-aftertext"></p>
   <p class="mem js-mem" data-t="{n} traders pehle se jud chuke hain"></p>
   <p class="disc">Sirf market news & data — yeh investment advice ya buy/sell recommendation nahi hai. Market Mint SEBI-registered adviser/research analyst nahi hai. Market investments are subject to market risks. Not affiliated with Telegram or Meta.</p>
@@ -93,8 +93,20 @@ h1 u{text-decoration:none;color:#ffd84d}
 <script>
 (function(){
   var M=window.MM;
+  // Tap -> open Telegram app directly; if it doesn't open in 1.5s, go to the normal t.me page
+  function appLink(u){ var m=u.match(/t\.me\/\+([\w-]+)/); if(m) return 'tg://join?invite='+m[1];
+    m=u.match(/t\.me\/([\w]+)/); return m ? 'tg://resolve?domain='+m[1] : ''; }
   document.querySelectorAll('.js-join').forEach(function(a){a.href=M.telegram;a.target="_top";
-    a.addEventListener('click',function(){ if(window.fbq) fbq('track','Lead',{content_name:'Telegram Join'}); });});
+    a.addEventListener('click',function(e){
+      if(window.fbq) fbq('track','Lead',{content_name:'Telegram Join'});
+      var tg=appLink(M.telegram); if(!tg) return;
+      e.preventDefault(); var left=false;
+      function gone(){ if(document.hidden) left=true; }
+      document.addEventListener('visibilitychange',gone); window.addEventListener('pagehide',gone);
+      setTimeout(function(){ document.removeEventListener('visibilitychange',gone);
+        if(!left && !document.hidden) window.location.href=M.telegram; },1500);
+      window.location.href=tg;
+    });});
   document.querySelectorAll('.js-mem').forEach(function(e){
     if(M.members){ e.innerHTML=e.getAttribute('data-t').replace('{n}',M.members); } else { e.remove(); }});
   // next scheduled post, India time (Mon-Fri schedule; weekends: news every 45 min 8:30-19:00)
